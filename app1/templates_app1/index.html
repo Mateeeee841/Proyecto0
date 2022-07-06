@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiPagina</title>
+</head>
+<body>
+
+    <h1>Bienvenido a la calculadora imc</h1>
+
+    <form action="" method="get">
+        <label for="peso">Ingrese su peso:</label>              
+        <input type="number" name="peso" step="any">
+        <hr>                                <!---->
+        <label for="altura">Ingrese su altura:</label>
+        <input type="number" name="altura" step="any">
+        <br>
+        <br>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <p>Su imc es: {{imc}}</p>
+
+</body>
+</html>

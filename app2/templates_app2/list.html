@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>your pokemons</title>
+</head>
+<body style="background-color: black;">
+    <table border="10" align="center" style="background-color:white ;border-color: black;">                      <!--El table me genera una tabla-->
+        <tr>                                                <!--el primer tr me asigna las columnas -->
+            <td>ID</td>                                     <!--cada td es una columna-->
+            <td>NAME</td>
+            <td>TYPE</td>
+            <td>LEVEL</td>
+            <td>CREATION</td>        
+        </tr>
+        {%for pokemon in pokemons%}     <!--Usamos el alias que le dimos a info en el views para hacer el bucle for-->
+        <tr>                                                <!--el segundo tr me asigna las filas -->
+            <td>{{pokemon.id}}</td>                        <!--cada td es una fila--> <!--el hace que pueda traer variables-->
+            <td>{{pokemon.name}}</td>
+            <td>{{pokemon.tipo}}</td>
+            <td>{{pokemon.lvl}}</td>
+            <td>{{pokemon.creation}}</td>
+        </tr>
+        {%endfor%}                                                  <!--cerramos el for-->
+    </table>
+    <nav class="menu">
+        <p>
+            <a href="{%url 'volver'%}" style="color: white;">Back</a>
+        </p>
+    </nav>
+</body>
+</html>

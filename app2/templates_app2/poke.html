@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemons creator</title>
+</head>
+<body style="background-color: black;">
+    <nav class="menu">
+            <p>
+                <a href="{%url 'CUALQUIER'%}">Lista</a>
+            </p>
+        
+    </nav>
+    <h1 style="color: white;">Add your pokemons:</h1>
+
+    <form action="" method="get" style="color: lightblue;">
+        <label for="name2" >Add your pokemon name:</label>              
+        <input type="text" name="name2" >
+        <hr>       
+        <label for="tipo2">Add your pokemon type:</label>
+        <input type="text" name="tipo2" >
+        <hr>                        
+        <label for="lvl2">Add your pokemon level:</label>
+        <input type="number" name="lvl2" >
+        <hr>
+        <label for="creation2">Date:</label>        <!--el label es el lugar donde asignamos el texto para el input-->
+        <input type="text" name="creation2" >                             <!--el input es el lugar donde asignamos info-->
+        <br>      
+        <br>                        
+        <button type="submit">Send</button>                           <!--Creamos un botón que suba la info-->
+    </form>
+    <br>
+    <br>
+</body>
+</html>
