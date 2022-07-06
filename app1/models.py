@@ -6,8 +6,12 @@ class persona(models.Model):
     nombre=models.CharField(max_length=60)      #CharField es para textos
     edad=models.IntegerField()                  #IntegerField() es para numeros
     nacimiento=models.DateField()               #DateField() es para fechas
+    def __str__(self):              
+        return f"{self.nombre}"
 
 class auto(models.Model):
     marca=models.CharField(max_length=40)
     velocidad=models.IntegerField()
     email=models.EmailField()
+    def __str__(self):              
+        return f"{self.marca}"
