@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{%block body%}
+
+<ul class="nav nav-pills">
+<li role="presentation"><a href="{%url 'inicio'%}">Inicio</a></li>
+<li role="presentation"><a href="{%url 'lista'%}">Objetos</a></li>
+<li role="presentation"><a href="{%url 'form'%}">Personajes</a></li>
+<li role="presentation" class="active"><a href="{%url 'formM'%}">Mascotas</a></li>
+<li role="presentation"><a href="{%url 'formA'%}">Autos</a></li>
+
+</ul>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <h1>Datos de la mascota:</h1>
+    <ul>
+        <li>Nombre de la mascota:     {{mascota_formulario.nombreM}}</li>
+        <br>
+        <li>Edad de la mascota :       {{mascota_formulario.edadM}}</li>
+    </ul>
+    <br>
+    <button type="submit" >sumbit</button>
+    
+    
+</form>
+
+{% endblock %}
