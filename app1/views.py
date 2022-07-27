@@ -1,14 +1,19 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader 
-from .models import personaje,mascota,auto
-from .forms import crearPersonaje,crearMascota,crearAuto
-# Create your views here.
-def ver_inicio(request):
-    context={}
-    plantilla=loader.get_template("inicio.html")
-    documento=plantilla.render(context)
-    return HttpResponse(documento)
+from .models import Publisher, pizza
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+from django.views.generic.edit import UpdateView ,DeleteView
+from django.contrib.auth.views import LoginView,LogoutView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
 
 def mostrar_base(request):
     context={}
@@ -16,74 +21,70 @@ def mostrar_base(request):
     documento= plantilla.render (context)            
     return HttpResponse(documento) 
 
-def ver_lista(request):
-    if request.GET:
-        buscador=request.GET["buscador"]
-        info4=personaje.objects.filter(nombre__icontains=buscador)
-        info5=mascota.objects.filter(nombreM__icontains=buscador)
-        info6=auto.objects.filter(marca__icontains=buscador)
-        info=personaje.objects.all()
-        info2=mascota.objects.all()
-        info3=auto.objects.all()
-        context={"personaje":info,"mascota":info2,"auto":info3,"personajes":info4,"mascotas":info5,"autos":info6}
-        plantilla=loader.get_template("lista.html")      
-        documento= plantilla.render (context)            
-        return HttpResponse(documento)  
-        
 
-    info=personaje.objects.all()
-    info2=mascota.objects.all()
-    info3=auto.objects.all()
-    context={"personaje":info,"mascota":info2,"auto":info3}
-    plantilla=loader.get_template("lista.html")
-    documento=plantilla.render(context)
-    return HttpResponse(documento)
+def ver_home(request):
+    context={}
+    plantilla=loader.get_template("home.html")      
+    documento= plantilla.render (context)            
+    return HttpResponse(documento) 
 
+#PIZZA:
+class PizzaList(LoginRequiredMixin,ListView):
+    model=pizza                                  
+    context_object_name="pizzas"               
+    template_name="pizza/listaP.html"                     
 
-def personaje_form(request):
-     if request.method=="POST":
-         personaje_formulario = crearPersonaje(request.POST)
-         print(personaje_formulario)
-         
-         if personaje_formulario.is_valid:
-             datos = personaje_formulario.cleaned_data
-             personajes=personaje(nombre=datos["nombre"],edad=datos["edad"])
-             personajes.save()
-             return render(request,"menu.html",{"mensaje":"Sumbit exitoso!!"})
+class PizzaDetalle(LoginRequiredMixin,DetailView):
+    model=pizza
+    template_name="pizza/detalleP.html"
 
-     else:
-             personaje_formulario=crearPersonaje()
+class PizzaCreacion(LoginRequiredMixin,CreateView):
+    model=pizza
+    success_url=reverse_lazy("Pizzas")            
+    template_name="pizza/pizza_form.html"
+    fields=["nombre","creador","ingredientes"]  
 
-     return render(request,"personaje_formulario.html",{"personaje_formulario":personaje_formulario})
+class PizzaUpdate(LoginRequiredMixin,UpdateView):
+    model=pizza
+    success_url=reverse_lazy("Pizzas")
+    template_name="pizza/editP.html"
+    fields=["nombre","ingredientes"]
 
-def mascota_form(request):
-     if request.method=="POST":
-         mascota_formulario = crearMascota(request.POST)
-         print(mascota_formulario)
-         
-         if mascota_formulario.is_valid:
-             datos = mascota_formulario.cleaned_data
-             mascotas=mascota(nombreM=datos["nombreM"],edadM=datos["edadM"])
-             mascotas.save()
-             return render(request,"menu.html",{"mensaje":"Sumbit exitoso!!"})
+class PizzaDelete(LoginRequiredMixin,DeleteView):
+    model=pizza
+    context_object_name="pizzas"
+    template_name="pizza/deleteP.html"
+    success_url=reverse_lazy("Pizzas")
 
-     else:
-             mascota_formulario=crearMascota()
+#USER:
+class LogIn(LoginView):
+    template_name="user/panel_login.html"
+    next_page=reverse_lazy("home")         
 
-     return render(request,"mascota_form.html",{"mascota_formulario":mascota_formulario})
+class LogOut(LogoutView):
+    template_name="user/panel_logout.html"
+
+class SignUp(SuccessMessageMixin,CreateView):
+    template_name="user/singup.html"
+    success_url=reverse_lazy("login")
+    form_class=UserCreationForm
+    success_message="Su perfil a sido creado !!"
+
+class UserUpdate(LoginRequiredMixin, UserPassesTestMixin,UpdateView):
+    model=User
+    template_name="user/user_form.html"
+    fields=["username","email","first_name","last_name"]
+
+    def get_success_url(self):
+        return reverse_lazy("user",kwargs={"pk":self.request.user.id})
+
+    def test_func(self):
+        return self.request.user.id == int(self.kwargs['pk'])
     
-def auto_form(request):
-     if request.method=="POST":
-         auto_formulario = crearAuto(request.POST)
-         print(auto_formulario)
-         
-         if auto_formulario.is_valid:
-             datos = auto_formulario.cleaned_data
-             autos=auto(marca=datos["marca"],año=datos["año"])
-             autos.save()
-             return render(request,"menu.html",{"mensaje":"Sumbit exitoso!!"})
+class UserDetail(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
+    model= Publisher
+    template_name="user/user_detail.html"
+    
 
-     else:
-             auto_formulario=crearAuto()
-
-     return render(request,"auto_form.html",{"auto_formulario":auto_formulario})
+    def test_func(self):
+        return self.request.user.id == int(self.kwargs['pk']) 

@@ -1,0 +1,8 @@
+<p style="margin-left: 0.3cm; font-weight:bolder;">Se requiere tener usuario para interactuar con las mascotas</p>
+<form method="post">
+    {%csrf_token%}
+    {{form.as_p}}
+    <input type="submit" value="Iniciar sesion">
+</form>
+<br>
+<a href="{% url 'register' %}">Crear usuario</a>
